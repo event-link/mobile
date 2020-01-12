@@ -1,6 +1,7 @@
 import 'package:EventLink/api/apple_handler.dart';
 import 'package:EventLink/api/facebook_handler.dart';
 import 'package:EventLink/api/google_handler.dart';
+import 'package:EventLink/screens/drawer/calendar_screen.dart';
 import 'package:EventLink/screens/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -126,6 +127,17 @@ class MyButtonState extends State<HomeScreen> {
                           MaterialPageRoute(
                             builder: (context) => ParticipatingEventsScreen(
                                 user: widget.user, buddies: buddies),
+                          ),
+                        ),
+                      ),
+                       Divider(color: Colors.grey),
+                      _createDrawerItem(
+                        icon: Icons.calendar_today,
+                        text: "Calendar",
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CalendarScreen(),
                           ),
                         ),
                       ),
