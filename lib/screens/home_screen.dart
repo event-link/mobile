@@ -84,8 +84,10 @@ class MyButtonState extends State<HomeScreen> {
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                UserProfileScreen(user: widget.user),
+                            builder: (context) => UserProfileScreen(
+                              user: widget.user,
+                              scaffoldContext: context,
+                            ),
                           ),
                         ),
                       ),

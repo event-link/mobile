@@ -15,8 +15,9 @@ import '../../widgets/customdialogbox.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final User user;
+  final BuildContext scaffoldContext;
 
-  UserProfileScreen({@required this.user});
+  UserProfileScreen({@required this.user, @required this.scaffoldContext});
 
   @override
   _UserProfileScreenState createState() => _UserProfileScreenState();
@@ -155,14 +156,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         );
 
     if (result.loading) {
-      _showSnackBar(context, "Loading...");
+      _showSnackBar(widget.scaffoldContext, "Loading...");
     }
 
     if (result.hasException) {
       var errors = result.exception.toString();
-      _showSnackBar(context, "Something went wrong: " + errors);
+      _showSnackBar(widget.scaffoldContext, "Something went wrong: " + errors);
     } else {
-      _showSnackBar(context, 'Succesfully updated profile picture! 📸');
+      _showSnackBar(
+          widget.scaffoldContext, 'Succesfully updated profile picture! 📸');
 
       setState(() {
         profilePic = FileImage(file);
@@ -405,8 +407,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               side: BorderSide(color: Colors.black12),
               borderRadius: new BorderRadius.circular(30.0)),
           color: Theme.of(context).accentColor,
-          onPressed: () =>
-              {} /* API Updates user (Create validater that checks if anything has changed */,
+          onPressed: () => saveChanges(),
         ),
       ),
     );
@@ -440,9 +441,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
     if (result.hasException) {
       var errors = result.exception.toString();
-      _showSnackBar(context, "Something went wrong: " + errors);
+      _showSnackBar(widget.scaffoldContext, "Something went wrong: " + errors);
     } else {
-      _showSnackBar(context, 'Succesfully updated user! 👏');
+      _showSnackBar(widget.scaffoldContext, 'Succesfully updated user!');
       Navigator.of(context).pop();
     }
   }
@@ -468,7 +469,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       await updateUser(context);
       Navigator.of(context).pop();
     } else {
-      _showSnackBar(context, 'E-mail is not valid! 👺');
+      _showSnackBar(widget.scaffoldContext, 'E-mail is not valid! 👺');
     }
   }
 

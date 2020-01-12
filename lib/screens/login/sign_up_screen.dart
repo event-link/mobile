@@ -105,6 +105,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       email: emailController.text.trim(),
       hashedPassword: passwordController.text.trim(),
       birthdate: DateTime(1990, 1, 1),
+      country: "Denmark",
       lastActivityDate: DateTime.now()
     ).toJson();
 
