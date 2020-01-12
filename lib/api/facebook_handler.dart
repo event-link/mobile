@@ -30,7 +30,7 @@ class FacebookHandler {
     eventLinkHandler.authenticateCreateUser(context);
 
     final FacebookLoginResult result =
-        await facebookSignIn.logInWithReadPermissions(['email']);
+        await facebookSignIn.logIn(['email']);
 
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
@@ -88,7 +88,7 @@ class FacebookHandler {
       BuildContext context, dynamic profile, dynamic jsonProfilePic) async {
     QueryResult result = await eventLinkHandler.clientToQuery().query(
           QueryOptions(
-            document: GraphQLQueries.getUserByEmailQuery,
+            documentNode: gql(GraphQLQueries.getUserByEmailQuery),
             variables: {'email': profile['email']},
             pollInterval: 5,
           ),
@@ -98,13 +98,13 @@ class FacebookHandler {
       _showSnackBar(context, "Getting user...");
     }
 
-    if (result.hasErrors) {
+    if (result.hasException) {
       /* If theres an error, this means that the user is not created in Eventlink. */
-      if (result.errors.toString().toLowerCase().contains("not found")) {
+      if (result.exception.toString().toLowerCase().contains("not found")) {
         _createUser(context, profile, jsonProfilePic);
       } else {
         throw new Exception(
-            "Something went wrong: " + result.errors.toString());
+            "Something went wrong: " + result.exception.toString());
       }
     } else {
       final jsonUser = result.data['userByEmail'];
@@ -164,7 +164,7 @@ class FacebookHandler {
 
     QueryResult result = await eventLinkHandler.clientToQuery().mutate(
           MutationOptions(
-            document: GraphQLQueries.createUserMutation,
+            documentNode: gql(GraphQLQueries.createUserMutation),
             variables: {
               'userInput': userInput.toJson(),
             },
@@ -175,8 +175,8 @@ class FacebookHandler {
       _showSnackBar(context, "Loading...");
     }
 
-    if (result.hasErrors) {
-      _showSnackBar(context, result.errors.toString());
+    if (result.hasException) {
+      _showSnackBar(context, result.exception.toString());
     } else {
       var signInModel = new SignInModel(
           email: userInput.email, password: userInput.hashedPassword);
@@ -188,7 +188,7 @@ class FacebookHandler {
 
       QueryResult result = await eventLinkHandler.clientToQuery().query(
             QueryOptions(
-              document: GraphQLQueries.getUserByEmailQuery,
+              documentNode: gql(GraphQLQueries.getUserByEmailQuery),
               variables: {'email': authModel.email},
               pollInterval: 5,
             ),
@@ -198,10 +198,10 @@ class FacebookHandler {
         _showSnackBar(context, "Getting user...");
       }
 
-      if (result.hasErrors) {
+      if (result.hasException) {
         _showSnackBar(
           context,
-          result.errors.toString(),
+          result.exception.toString(),
         );
       } else {
         final jsonUser = result.data['userByEmail'];
@@ -275,7 +275,7 @@ class FacebookHandler {
   static Future updateUser(BuildContext context, User user) async {
     QueryResult result = await eventLinkHandler.clientToQuery().mutate(
           MutationOptions(
-            document: GraphQLQueries.updateUserMutation,
+            documentNode: gql(GraphQLQueries.updateUserMutation),
             variables: {
               'userInput': user.toJson(),
             },
@@ -286,8 +286,8 @@ class FacebookHandler {
       _showSnackBar(context, "Loading...");
     }
 
-    if (result.hasErrors) {
-      var errors = result.errors.toString();
+    if (result.hasException) {
+      var errors = result.exception.toString();
       _showSnackBar(context, "Something went wrong: " + errors);
     } else {
       _showSnackBar(context, 'Succesfully updated user! 👏');

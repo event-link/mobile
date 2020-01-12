@@ -146,7 +146,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
     QueryResult result = await eventLinkHandler.clientToQuery().mutate(
           MutationOptions(
-            document: GraphQLQueries.uploadProfilePictureMutation,
+            documentNode: gql(GraphQLQueries.uploadProfilePictureMutation),
             variables: {
               'userId': widget.user.id,
               'imageData': base64Image,
@@ -158,8 +158,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       _showSnackBar(context, "Loading...");
     }
 
-    if (result.hasErrors) {
-      var errors = result.errors.toString();
+    if (result.hasException) {
+      var errors = result.exception.toString();
       _showSnackBar(context, "Something went wrong: " + errors);
     } else {
       _showSnackBar(context, 'Succesfully updated profile picture! 📸');
@@ -427,7 +427,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
     QueryResult result = await eventLinkHandler.clientToQuery().mutate(
           MutationOptions(
-            document: GraphQLQueries.updateUserMutation,
+            documentNode: gql(GraphQLQueries.updateUserMutation),
             variables: {
               'userInput': map,
             },
@@ -438,8 +438,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       _showSnackBar(context, "Loading...");
     }
 
-    if (result.hasErrors) {
-      var errors = result.errors.toString();
+    if (result.hasException) {
+      var errors = result.exception.toString();
       _showSnackBar(context, "Something went wrong: " + errors);
     } else {
       _showSnackBar(context, 'Succesfully updated user! 👏');

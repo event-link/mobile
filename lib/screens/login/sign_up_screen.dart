@@ -110,7 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     QueryResult result = await eventLinkHandler.clientToQuery().mutate(
           MutationOptions(
-            document: GraphQLQueries.createUserMutation,
+            documentNode: gql(GraphQLQueries.createUserMutation),
             variables: {
               'userInput': userInput,
             },
@@ -121,8 +121,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _showSnackBar(scaffoldContext, "Loading...");
     }
 
-    if (result.hasErrors) {
-      var errors = result.errors.toString();
+    if (result.hasException) {
+      var errors = result.exception.toString();
       if (errors.contains("already exists!")) {
         _showSnackBar(
             scaffoldContext, userInput['email'] + " is already registered.");
@@ -141,7 +141,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       QueryResult result = await eventLinkHandler.clientToQuery().query(
             QueryOptions(
-              document: GraphQLQueries.getUserByEmailQuery,
+              documentNode: gql(GraphQLQueries.getUserByEmailQuery),
               variables: {'email': authModel.email},
               pollInterval: 5,
             ),
@@ -151,10 +151,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _showSnackBar(context, "Getting user...");
       }
 
-      if (result.hasErrors) {
+      if (result.hasException) {
         _showSnackBar(
           scaffoldContext,
-          result.errors.toString(),
+          result.exception.toString(),
         );
       }
 

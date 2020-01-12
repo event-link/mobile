@@ -147,16 +147,6 @@ class _AboutScreenState extends State<AboutScreen> {
     );
   }
 
-  void _showSnackBar(BuildContext context, String text) {
-    final snackBar = SnackBar(
-      content: Text(text),
-      backgroundColor: Theme.of(context).primaryColor,
-    );
-    Scaffold.of(context).showSnackBar(
-      snackBar,
-    );
-  }
-
   BoxDecoration _createGradiant() {
     return BoxDecoration(
       gradient: LinearGradient(

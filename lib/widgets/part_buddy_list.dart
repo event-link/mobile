@@ -100,7 +100,7 @@ class _PartBuddyListState extends State<PartBuddyList> {
   void _navigateToUser(NetworkImage image, String email) async {
     QueryResult result = await eventLinkHandler.clientToQuery().query(
           QueryOptions(
-            document: GraphQLQueries.getUserByEmailQuery,
+            documentNode: gql(GraphQLQueries.getUserByEmailQuery),
             variables: {'email': email},
             pollInterval: 5,
           ),
@@ -110,8 +110,8 @@ class _PartBuddyListState extends State<PartBuddyList> {
       print("Loading...");
     }
 
-    if (result.hasErrors) {
-      print("Errors: " + result.errors.toString());
+    if (result.hasException) {
+      print("Errors: " + result.exception.toString());
     }
 
     final jsonUser = result.data['userByEmail'] as dynamic;

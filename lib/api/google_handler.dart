@@ -21,8 +21,6 @@ class GoogleHandler {
   static final GoogleSignIn googleSignIn = GoogleSignIn();
   static final EventLinkHandler eventLinkHandler = EventLinkHandler();
 
-  static GoogleSignInAccount _currentAccount;
-
   factory GoogleHandler() {
     return _instance;
   }
@@ -117,7 +115,7 @@ class GoogleHandler {
 
     QueryResult result = await eventLinkHandler.clientToQuery().mutate(
           MutationOptions(
-            document: GraphQLQueries.createUserMutation,
+            documentNode: gql(GraphQLQueries.createUserMutation),
             variables: {
               'userInput': userInput.toJson(),
             },
@@ -128,8 +126,8 @@ class GoogleHandler {
       _showSnackBar(context, "Loading...");
     }
 
-    if (result.hasErrors) {
-      _showSnackBar(context, result.errors.toString());
+    if (result.hasException) {
+      _showSnackBar(context, result.exception.toString());
     } else {
       var signInModel = new SignInModel(
           email: userInput.email, password: userInput.hashedPassword);
@@ -141,7 +139,7 @@ class GoogleHandler {
 
       QueryResult result = await eventLinkHandler.clientToQuery().query(
             QueryOptions(
-              document: GraphQLQueries.getUserByEmailQuery,
+              documentNode: gql(GraphQLQueries.getUserByEmailQuery),
               variables: {'email': authModel.email},
               pollInterval: 5,
             ),
@@ -151,10 +149,10 @@ class GoogleHandler {
         _showSnackBar(context, "Getting user...");
       }
 
-      if (result.hasErrors) {
+      if (result.hasException) {
         _showSnackBar(
           context,
-          result.errors.toString(),
+          result.exception.toString(),
         );
       } else {
         final jsonUser = result.data['userByEmail'];
@@ -180,7 +178,7 @@ class GoogleHandler {
   static Future _checkForUser(BuildContext context, Person profile) async {
     QueryResult result = await eventLinkHandler.clientToQuery().query(
           QueryOptions(
-            document: GraphQLQueries.getUserByEmailQuery,
+            documentNode: gql(GraphQLQueries.getUserByEmailQuery),
             variables: {'email': profile.emailAddresses[0].value},
             pollInterval: 5,
           ),
@@ -190,14 +188,14 @@ class GoogleHandler {
       _showSnackBar(context, "Getting user...");
     }
 
-    if (result.hasErrors) {
+    if (result.hasException) {
       /* If theres an error, this means that the user is not created in Eventlink. */
 
-      if (result.errors.toString().toLowerCase().contains("not found")) {
+      if (result.exception.toString().toLowerCase().contains("not found")) {
         _createUser(context, profile);
       } else {
         throw new Exception(
-            "Something went wrong: " + result.errors.toString());
+            "Something went wrong: " + result.exception.toString());
       }
 
       /* If the user has been found */

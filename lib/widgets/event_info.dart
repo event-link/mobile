@@ -109,7 +109,7 @@ class _EventInfoState extends State<EventInfo> {
         .clientToQuery()
         .mutate(
           MutationOptions(
-            document: GraphQLQueries.removeParticipatingEventMutation,
+            documentNode: gql(GraphQLQueries.removeParticipatingEventMutation),
             variables: {
               'userId': widget.user.id,
               'eventId': widget.event.id,
@@ -126,8 +126,8 @@ class _EventInfoState extends State<EventInfo> {
       print("loading...");
     }
 
-    if (result.hasErrors) {
-      var errors = result.errors.toString();
+    if (result.hasException) {
+      var errors = result.exception.toString();
       print(errors);
     } else {
       _showSnackBar(
@@ -145,7 +145,7 @@ class _EventInfoState extends State<EventInfo> {
         .clientToQuery()
         .mutate(
           MutationOptions(
-            document: GraphQLQueries.addParticipatingEventMutation,
+            documentNode: gql(GraphQLQueries.addParticipatingEventMutation),
             variables: {
               'userId': widget.user.id,
               'eventId': widget.event.id,
@@ -162,8 +162,8 @@ class _EventInfoState extends State<EventInfo> {
       print("loading...");
     }
 
-    if (result.hasErrors) {
-      var errors = result.errors.toString();
+    if (result.hasException) {
+      var errors = result.exception.toString();
       print(errors);
     } else {
       _showSnackBar(
@@ -262,16 +262,6 @@ class _EventInfoState extends State<EventInfo> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _createShareButton(BuildContext context) {
-    return Container(
-      alignment: Alignment.centerRight,
-      child: Icon(
-        Icons.share,
-        color: Colors.black,
       ),
     );
   }

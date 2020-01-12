@@ -125,6 +125,7 @@ class User {
     } catch (e) {
       return null;
     }
+    return null;
   }
 
   static DateTime parseDateTimeJSON(Map<String, dynamic> json, String field) {

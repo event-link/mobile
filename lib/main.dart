@@ -14,6 +14,7 @@ import 'model/eventlink/user.dart';
 import 'screens/login/login_screen.dart';
 
 Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var email = prefs.getString('userEmail');
   var token = prefs.getString('userToken');
@@ -136,7 +137,7 @@ class StartHomeScreen extends StatelessWidget {
   Future<User> _getUser() async {
     QueryResult result = await eventLinkHandler.clientToQuery().query(
           QueryOptions(
-            document: GraphQLQueries.getUserByEmailQuery,
+            documentNode: gql(GraphQLQueries.getUserByEmailQuery),
             variables: {'email': email},
             pollInterval: 5,
           ),
@@ -146,8 +147,8 @@ class StartHomeScreen extends StatelessWidget {
       print("Getting user...");
     }
 
-    if (result.hasErrors) {
-      print(result.errors.toString());
+    if (result.hasException) {
+      print(result.exception.toString());
     }
 
     final jsonUser = result.data['userByEmail'];

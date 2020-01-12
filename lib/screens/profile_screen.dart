@@ -134,7 +134,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future _mutationRemoveBuddy(BuildContext context) async {
     QueryResult result = await eventLinkHandler.clientToQuery().mutate(
           MutationOptions(
-            document: GraphQLQueries.removeBuddyMutation,
+            documentNode: gql(GraphQLQueries.removeBuddyMutation),
             variables: {
               'userId': widget.user.id,
               'buddyId': widget.buddy.id,
@@ -146,8 +146,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _showSnackBar(context, "Loading...");
     }
 
-    if (result.hasErrors) {
-      var errors = result.errors.toString();
+    if (result.hasException) {
+      var errors = result.exception.toString();
       _showSnackBar(context, "Something went wrong: " + errors);
     } else {
       _showSnackBar(context, widget.buddy.firstName + ' has been removed 💔');
@@ -160,7 +160,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future _mutationAddBuddy(BuildContext context) async {
     QueryResult result = await eventLinkHandler.clientToQuery().mutate(
           MutationOptions(
-            document: GraphQLQueries.addBuddyMutation,
+            documentNode: gql(GraphQLQueries.addBuddyMutation),
             variables: {
               'userId': widget.user.id,
               'buddyId': widget.buddy.id,
@@ -172,8 +172,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _showSnackBar(context, "Loading...");
     }
 
-    if (result.hasErrors) {
-      var errors = result.errors.toString();
+    if (result.hasException) {
+      var errors = result.exception.toString();
       _showSnackBar(context, "Something went wrong: " + errors);
     } else {
       _showSnackBar(context, widget.buddy.firstName + ' has been added 💖');

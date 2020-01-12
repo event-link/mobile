@@ -46,7 +46,7 @@ class _BuddyListState extends State<BuddyList> {
       alignment: Alignment.center,
       child: Query(
         options: QueryOptions(
-          document: GraphQLQueries.searchUsersQuery,
+          documentNode: gql(GraphQLQueries.searchUsersQuery),
           variables: {'query': widget.query},
           pollInterval: 5,
         ),
@@ -224,7 +224,7 @@ class _BuddyListState extends State<BuddyList> {
       NetworkImage image, String email, BuildContext context) async {
     QueryResult result = await eventLinkHandler.clientToQuery().query(
           QueryOptions(
-            document: GraphQLQueries.getUserByEmailQuery,
+            documentNode: gql(GraphQLQueries.getUserByEmailQuery),
             variables: {'email': email},
             pollInterval: 5,
           ),
@@ -234,8 +234,8 @@ class _BuddyListState extends State<BuddyList> {
       print("Loading...");
     }
 
-    if (result.hasErrors) {
-      print("Errors: " + result.errors.toString());
+    if (result.hasException) {
+      print("Errors: " + result.exception.toString());
     }
 
     final jsonUser = result.data['userByEmail'] as dynamic;

@@ -79,7 +79,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     QueryResult result = await eventLinkHandler.clientToQuery().mutate(
           MutationOptions(
-            document: GraphQLQueries.updateUserMutation,
+            documentNode: gql(GraphQLQueries.updateUserMutation),
             variables: {
               'userInput': map,
             },
@@ -90,8 +90,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _showSnackBar(context, "Loading...");
     }
 
-    if (result.hasErrors) {
-      var errors = result.errors.toString();
+    if (result.hasException) {
+      var errors = result.exception.toString();
       _showSnackBar(context, "Something went wrong: " + errors);
     } else {
       _showSnackBar(context, 'Succesfully deactivated user! 😾');

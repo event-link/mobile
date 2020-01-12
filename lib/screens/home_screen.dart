@@ -320,7 +320,7 @@ class MyButtonState extends State<HomeScreen> {
   void _getBuddies(BuildContext context) async {
     QueryResult result = await eventLinkHandler.clientToQuery().query(
           QueryOptions(
-            document: GraphQLQueries.getBuddiesQuery,
+            documentNode: gql(GraphQLQueries.getBuddiesQuery),
             variables: {
               'userId': widget.user.id,
             },
@@ -331,8 +331,8 @@ class MyButtonState extends State<HomeScreen> {
       _showSnackBar(context, "Loading buddies...");
     }
 
-    if (result.hasErrors) {
-      var errors = result.errors.toString();
+    if (result.hasException) {
+      var errors = result.exception.toString();
       _showSnackBar(context, "Errors during loading buddies: " + errors);
     }
 
@@ -353,7 +353,7 @@ class MyButtonState extends State<HomeScreen> {
   void _getAllUserIds(BuildContext context) async {
     QueryResult result = await eventLinkHandler.clientToQuery().query(
           QueryOptions(
-            document: GraphQLQueries.searchUsersIdsQuery,
+            documentNode: gql(GraphQLQueries.searchUsersIdsQuery),
             variables: {
               'query': '',
             },
@@ -364,8 +364,8 @@ class MyButtonState extends State<HomeScreen> {
       _showSnackBar(context, "Loading users...");
     }
 
-    if (result.hasErrors) {
-      var errors = result.errors.toString();
+    if (result.hasException) {
+      var errors = result.exception.toString();
       _showSnackBar(context, "Errors during loading users: " + errors);
     }
 

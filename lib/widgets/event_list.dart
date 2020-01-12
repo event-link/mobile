@@ -35,7 +35,7 @@ class EventList extends StatelessWidget {
     return Container(
       child: Query(
         options: QueryOptions(
-          document: GraphQLQueries.eventSearchQuery,
+          documentNode: gql(GraphQLQueries.eventSearchQuery),
           variables: {'query': query, 'filter': filter},
           pollInterval: 5,
         ),

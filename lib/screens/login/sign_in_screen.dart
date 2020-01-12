@@ -70,7 +70,7 @@ class _SignInScreenState extends State<SignInScreen> {
           .clientToQuery()
           .query(
             QueryOptions(
-              document: GraphQLQueries.getUserByEmailQuery,
+              documentNode: gql(GraphQLQueries.getUserByEmailQuery),
               variables: {'email': authModel.email},
               pollInterval: 5,
             ),
@@ -85,8 +85,8 @@ class _SignInScreenState extends State<SignInScreen> {
         _showSnackBar(context, "Getting user...");
       }
 
-      if (result.hasErrors) {
-        var errors = result.errors.toString();
+      if (result.hasException) {
+        var errors = result.exception.toString();
 
         if (errors.contains("credentials")) {
           _showSnackBar(scaffoldContext, "Incorrect credentials!");

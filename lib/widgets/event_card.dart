@@ -244,7 +244,7 @@ class _EventCardState extends State<EventCard> {
         .clientToQuery()
         .mutate(
           MutationOptions(
-            document: GraphQLQueries.addFavoriteEventMutation,
+            documentNode: gql(GraphQLQueries.addFavoriteEventMutation),
             variables: {
               'userId': widget.user.id,
               'eventId': widget.event.id,
@@ -261,8 +261,8 @@ class _EventCardState extends State<EventCard> {
       print("loading...");
     }
 
-    if (result.hasErrors) {
-      var errors = result.errors.toString();
+    if (result.hasException) {
+      var errors = result.exception.toString();
       print(errors);
     }
   }
@@ -274,7 +274,7 @@ class _EventCardState extends State<EventCard> {
         .clientToQuery()
         .mutate(
           MutationOptions(
-            document: GraphQLQueries.removeFavoriteEventMutation,
+            documentNode: gql(GraphQLQueries.removeFavoriteEventMutation),
             variables: {
               'userId': widget.user.id,
               'eventId': widget.event.id,
@@ -291,8 +291,8 @@ class _EventCardState extends State<EventCard> {
       print("loading...");
     }
 
-    if (result.hasErrors) {
-      var errors = result.errors.toString();
+    if (result.hasException) {
+      var errors = result.exception.toString();
       print(errors);
     }
   }
