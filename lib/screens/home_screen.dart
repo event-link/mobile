@@ -94,6 +94,19 @@ class MyButtonState extends State<HomeScreen> {
                       ),
                       Divider(color: Colors.grey),
                       _createDrawerItem(
+                        icon: Icons.calendar_today,
+                        text: "Calendar",
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CalendarScreen(
+                              user: widget.user,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Divider(color: Colors.grey),
+                      _createDrawerItem(
                         icon: Icons.group,
                         text: "Buddies",
                         onTap: () => Navigator.push(
@@ -127,17 +140,6 @@ class MyButtonState extends State<HomeScreen> {
                           MaterialPageRoute(
                             builder: (context) => ParticipatingEventsScreen(
                                 user: widget.user, buddies: buddies),
-                          ),
-                        ),
-                      ),
-                       Divider(color: Colors.grey),
-                      _createDrawerItem(
-                        icon: Icons.calendar_today,
-                        text: "Calendar",
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CalendarScreen(),
                           ),
                         ),
                       ),

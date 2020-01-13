@@ -5,11 +5,13 @@ import 'package:EventLink/model/eventlink/user.dart';
 import 'package:EventLink/model/eventlink/user_input.dart';
 import 'package:EventLink/model/signin_model.dart';
 import 'package:EventLink/screens/home_screen.dart';
+
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:googleapis/calendar/v3.dart' as cal;
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
 import 'dart:convert';
 
@@ -18,7 +20,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class GoogleHandler {
   static final GoogleHandler _instance = GoogleHandler._internal();
-  static final GoogleSignIn googleSignIn = GoogleSignIn();
+  static GoogleSignIn _googleSignIn;
   static final EventLinkHandler eventLinkHandler = EventLinkHandler();
 
   factory GoogleHandler() {
@@ -28,19 +30,19 @@ class GoogleHandler {
   GoogleHandler._internal();
 
   static Future<Null> signIn(BuildContext context) async {
-    eventLinkHandler.authenticateCreateUser(context); 
+    eventLinkHandler.authenticateCreateUser(context);
 
-     _showSnackBar(context, "Signing in with Google...");
+    _showSnackBar(context, "Signing in with Google...");
 
-
-    final _googleSignIn = new GoogleSignIn(scopes: [
+    _googleSignIn = new GoogleSignIn(scopes: [
       'https://www.googleapis.com/auth/contacts.readonly',
       'https://www.googleapis.com/auth/user.addresses.read',
       'https://www.googleapis.com/auth/user.birthday.read',
       'https://www.googleapis.com/auth/user.emails.read',
       'https://www.googleapis.com/auth/user.phonenumbers.read',
       'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/userinfo.profile'
+      'https://www.googleapis.com/auth/userinfo.profile',
+      'https://www.googleapis.com/auth/calendar'
     ]);
 
     await _googleSignIn.signIn();
@@ -55,6 +57,28 @@ class GoogleHandler {
         );
 
     _checkForUser(context, data);
+  }
+
+  static Future<cal.Events> getCalendarEvents() async {
+    if (!await _googleSignIn.isSignedIn()) {
+      _googleSignIn = new GoogleSignIn(scopes: [
+        'https://www.googleapis.com/auth/contacts.readonly',
+        'https://www.googleapis.com/auth/user.addresses.read',
+        'https://www.googleapis.com/auth/user.birthday.read',
+        'https://www.googleapis.com/auth/user.emails.read',
+        'https://www.googleapis.com/auth/user.phonenumbers.read',
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/calendar'
+      ]);
+      await _googleSignIn.signIn();
+    }
+
+    final authHeaders = await _googleSignIn.currentUser.authHeaders;
+    final httpClient = new GoogleHttpClient(authHeaders);
+    var calendar = new cal.CalendarApi(httpClient);
+    var calEvents = calendar.events.list("primary");
+    return calEvents;
   }
 
   void signOut(BuildContext context, GoogleSignIn googleSignIn) async {
@@ -278,10 +302,10 @@ class GoogleHttpClient extends IOClient {
   GoogleHttpClient(this._headers) : super();
 
   @override
-  Future<StreamedResponse> send(BaseRequest request) =>
+  Future<http.StreamedResponse> send(http.BaseRequest request) =>
       super.send(request..headers.addAll(_headers));
 
   @override
-  Future<Response> head(Object url, {Map<String, String> headers}) =>
+  Future<http.Response> head(Object url, {Map<String, String> headers}) =>
       super.head(url, headers: headers..addAll(_headers));
 }
