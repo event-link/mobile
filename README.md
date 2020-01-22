@@ -1,3 +1,5 @@
+![EventLink Logo](https://github.com/Event-Link/mobile/blob/master/img/logo.jpg)
+
 ```
                    _      _  _       
  _ __ ___    ___  | |__  (_)| |  ___ 
@@ -13,8 +15,6 @@
  ░▓▓▓▓▓▓▓▓▓▓
  ░░░░░░░░░░
 ```
-
-![EventLink Logo](https://github.com/Event-Link/mobile/blob/master/img/logo.jpg)
 
 ## Table of Contents
  - [Introduction](#Introduction)
