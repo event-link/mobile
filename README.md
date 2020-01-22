@@ -14,6 +14,8 @@
  ░░░░░░░░░░
 ```
 
+![EventLink Logo](https://github.com/Event-Link/mobile/blob/master/img/logo.jpg)
+
 ## Table of Contents
  - [Introduction](#Introduction)
  - [Installing](#Installing)
