@@ -31,6 +31,7 @@ EventLink started out as a bachelor's thesis at the [Technical University of Den
 # Installing
 
 Clone this repository:
+
 `git clone https://github.com/Event-Link/mobile`
 
 Once cloned, you can open it in Visual Studio Code and compile application files for both Android and iOS. To get started with Flutter in Visual Studio Code, check out this [guide](https://flutter.dev/docs/development/tools/vs-code).
