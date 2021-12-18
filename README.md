@@ -44,3 +44,4 @@ This is simply a mobile application that sends api requests to the EventLink bac
 
 # License
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
+
